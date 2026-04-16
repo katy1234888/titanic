@@ -34,20 +34,21 @@ def preprocess_data(train_df, test_df):
     train_processed = train_df.copy()
     test_processed = test_df.copy()
     
+    # Fix: Direct assignment instead of inplace=True
     age_mean = train_processed['Age'].mean()
-    train_processed['Age'].fillna(age_mean, inplace=True)
-    test_processed['Age'].fillna(age_mean, inplace=True)
+    train_processed['Age'] = train_processed['Age'].fillna(age_mean)
+    test_processed['Age'] = test_processed['Age'].fillna(age_mean)
     
     fare_median = train_processed['Fare'].median()
-    train_processed['Fare'].fillna(fare_median, inplace=True)
-    test_processed['Fare'].fillna(fare_median, inplace=True)
+    train_processed['Fare'] = train_processed['Fare'].fillna(fare_median)
+    test_processed['Fare'] = test_processed['Fare'].fillna(fare_median)
     
     train_processed['Sex'] = train_processed['Sex'].replace(['female', 'male'], [0, 1])
     test_processed['Sex'] = test_processed['Sex'].replace(['female', 'male'], [0, 1])
     
     cols_to_drop = ['Name', 'Ticket', 'Cabin', 'Embarked']
-    train_processed.drop(columns=cols_to_drop, inplace=True)
-    test_processed.drop(columns=cols_to_drop, inplace=True)
+    train_processed = train_processed.drop(columns=cols_to_drop)
+    test_processed = test_processed.drop(columns=cols_to_drop)
     
     return train_processed, test_processed
 
@@ -72,8 +73,7 @@ def convert_df_to_csv(df):
 with st.sidebar:
     st.title("🚢 Titanic Survival Predictor")
     
-    # Notebook Image
-    st.image("Screenshot_25z0.png")
+    # st.image("Screenshot_25z0.png") # Uncomment if you have this file
     
     st.header("1. Upload Your Data")
     st.write("Please upload the `train.csv` and `test.csv` files.")
